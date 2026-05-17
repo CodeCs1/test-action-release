@@ -6,7 +6,7 @@ on:
       - "v*.*.*" # Triggers only on semantic version tags like v1.2.3
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     permissions: # v3 often requires explicit write permissions for the token
       contents: write
