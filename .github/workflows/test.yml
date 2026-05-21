@@ -1,44 +1,25 @@
-name: "Release Creation"
+name: Main
 
-on:
+on: 
   push:
     tags:
-      - "v*.*.*" # Triggers only on semantic version tags like v1.2.3
+      - "v*.*.*"
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: # v3 often requires explicit write permissions for the token
-      contents: write
     steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Useful if you need full history for changelogs
-
-      - name: "Build Assets"
-        run: |
-          echo "Building my application..."
-          echo "Build result" > build-artifact.txt
-          echo "Another file" > config.json
-
-      - name: "Create GitHub Release"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build
+        run: echo ${{ github.sha }} > Release.txt
+      - name: Test
+        run: cat Release.txt
+      - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          # List of files to upload as release assets (newline-delimited)
-          files: |
-            build-artifact.txt
-            config.json
-          
-          # Automatically generate the release body from commit messages
-          generate_release_notes: true
-          
-          # Optional: Mark as a draft or a prerelease
-          draft: false
-          prerelease: false
-          
-          # Optional: Custom body (overrides generate_release_notes if both provided)
-          # body: "This is a custom release description."
-          
-          # The GITHUB_TOKEN is used by default, but you can specify it explicitly
+          files: Release.txt
           token: ${{ secrets.GITHUB_TOKEN }}
