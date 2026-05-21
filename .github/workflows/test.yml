@@ -15,10 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Build
-        run: echo ${{ github.sha }} > Release.txt
+        run: echo ${{ github.sha }} > Release1.txt
       - name: Test
-        run: cat Release.txt
+        run: cat Release1.txt
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          files: Release.txt
+          files: Release1.txt
