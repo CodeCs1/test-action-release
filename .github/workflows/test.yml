@@ -22,4 +22,3 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: Release.txt
-          token: ${{ secrets.GITHUB_TOKEN }}
