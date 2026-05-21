@@ -30,4 +30,3 @@ jobs:
         if: github.ref_type == 'tag'
         with:
           files: Release1.txt
-          token: ${{secrets.GITHUB_TOKEN}}
