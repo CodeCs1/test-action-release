@@ -5,16 +5,10 @@ name: CI
 permissions:
   contents: write
 
-# Controls when the workflow will run
 on:
   push:
-    tags:
-      - "v*.*.*"
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,7 +21,7 @@ jobs:
         run: cat Release1.txt
       - name: Release
         uses: softprops/action-gh-release@v3
-        if: github.ref_type == 'tag'
         with:
+          tag_name: v1.4.2
           files: Release1.txt
           token: ${{secrets.GITHUB_TOKEN}}
