@@ -1,44 +1,33 @@
+# This is a basic workflow to help you get started with Actions
+
 name: CI
 
+permissions:
+  contents: write
+
+# Controls when the workflow will run
 on:
-  workflow_dispatch:
   push:
     tags:
-      - "v*.*.*" # Triggers only on semantic version tags
+      - "v*.*.*"
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # CRITICAL: Required to create releases and upload assets
-    
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Build Assets
-        run: |
-          echo "Build version ${{ github.ref_name }}" > build-artifact.txt
-          # Add your actual build commands here (npm run build, go build, etc.)
-
-      - name: Create GitHub Release
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build
+        run: echo ${{ github.ref_type }} > Release1.txt
+      - name: Test
+        run: cat Release1.txt
+      - name: Release
         uses: softprops/action-gh-release@v3
-        if: github.ref_type =='branch'
+        if: github.ref_type == 'tag'
         with:
-          # Path to files you want to upload to the release
-          files: |
-            build-artifact.txt
-            dist/*.zip
-          
-          # Automatically generates release notes from commit history
-          generate_release_notes: true
-          
-          # Optional: Mark as a draft or pre-release
-          draft: false
-          prerelease: false
-          
-          # Optional: Custom body (overrides auto-generated notes if provided)
-          # body: "This is a custom release description."
-          
-          # The token is handled automatically by the runner
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: Release1.txt
+          token: ${{secrets.GITHUB_TOKEN}}
